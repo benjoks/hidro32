@@ -7,24 +7,17 @@
 #include <PubSubClient.h>
 
 String dId = "121212";
-String webhook_pass = "nxoS86rGKN";
-String webhook_endpoint = "http://192.168.100.3:3001/api/getdevicecredentials";
-const char* mqtt_server = "192.168.100.3";
-// String webhook_endpoint = "http://192.168.150.117:3001/api/getdevicecredentials";
-// const char* mqtt_server = "192.168.150.117";
-/*String webhook_endpoint = "http://192.168.250.117:3001/api/getdevicecredentials";
-const char* mqtt_server = "192.168.250.117";*/
+String webhook_pass = WEBHOOK_PASS;
+String webhook_endpoint = WEBHOOK_ENDPOINT;
+const char* mqtt_server = MQTT_SERVER;
+
+// WiFi Credentials
+const char *wifi_ssid = WIFI_SSID;
+const char *wifi_password = WIFI_PASS;
 
 //PINS
 #define led 2
 
-//W I F I
-const char *wifi_ssid = "dlink-5038";
-const char *wifi_password = "connie123";
-/* const char *wifi_ssid = "moto";
-const char *wifi_password = "RADS07111993"; */
-// const char *wifi_ssid = "benjamin";
-// const char *wifi_password = "asdasd55";
 
 //Global Vars
 WiFiClient espclient;
@@ -327,29 +320,29 @@ float get_ph(){
   buffer_arr[i]=analogRead(35);
   delay(30);
  }
-for(int i=0;i<9;i++)
-{
-  for(int j=i+1;j<10;j++)
- {
-  if(buffer_arr[i]>buffer_arr[j])
+  for(int i=0;i<9;i++)
   {
-    temp=buffer_arr[i];
-    buffer_arr[i]=buffer_arr[j];
-    buffer_arr[j]=temp;
+    for(int j=i+1;j<10;j++)
+  {
+    if(buffer_arr[i]>buffer_arr[j])
+    {
+      temp=buffer_arr[i];
+      buffer_arr[i]=buffer_arr[j];
+      buffer_arr[j]=temp;
+    }
   }
- }
-}
-avgval=0;
-for(int i=2;i<8;i++)
-avgval+=buffer_arr[i];
-float volt=(float)avgval*3.3/4096.0/6;  
-//Serial.print("Voltage: ");
-//Serial.println(volt);
-ph_act = -5.70 * volt + calibration_value;
+  }
+  avgval=0;
+  for(int i=2;i<8;i++)
+  avgval+=buffer_arr[i];
+  float volt=(float)avgval*3.3/4096.0/6;  
+  //Serial.print("Voltage: ");
+  //Serial.println(volt);
+  ph_act = -5.70 * volt + calibration_value;
 
-//Serial.print("pH Val: ");
-//Serial.println(ph_act);
-return ph_act;
+  //Serial.print("pH Val: ");
+  //Serial.println(ph_act);
+  return ph_act;
 }
 
 // median filtering algorithm PPM
